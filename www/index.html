@@ -189,8 +189,9 @@ label{display:block;font-weight:650;font-size:.9rem;margin:10px 0 5px}input,sele
  </div>
  <div class="panel">
   <h2>Agenda (Google Agenda, lecture seule)</h2>
-  <p class="small muted">Important, par souci de transparence : dans cette page publiée, les scripts de connexion Google ne peuvent pas se charger pour des raisons de sécurité — une synchronisation automatique et en direct n’est donc pas possible ici. La solution fiable, sans mot de passe ni risque : exporte ton calendrier Google (Google Agenda → Réglages → Importer/exporter → Exporter) puis importe le fichier .ics ci-dessous. Tu peux répéter l’opération aussi souvent que tu veux ; rien n’est envoyé sur Internet, tout reste dans ce navigateur.</p>
-  <div class="actions"><label class="btn secondary" for="icsImport" style="cursor:pointer">Importer un calendrier (.ics)</label><input class="hidden" id="icsImport" type="file" accept=".ics,text/calendar"></div>
+  <p class="small muted">Colle ici l’« adresse secrète au format iCal » de ton agenda Google : sur un ordinateur, Google Agenda → ⚙️ Réglages → clique sur le nom de ton agenda dans la colonne de gauche → fais défiler jusqu’à « Intégrer l’agenda » → copie l’adresse secrète au format iCal. Garde ce lien pour toi : toute personne qui le possède peut consulter ton agenda.</p>
+  <label for="gcalIcsUrl">Adresse secrète iCal</label><input id="gcalIcsUrl" placeholder="https://calendar.google.com/calendar/ical/votreadresse/basic.ics">
+  <div class="actions"><button class="btn" id="gcalSync">Synchroniser maintenant</button><label class="btn secondary" for="icsImport" style="cursor:pointer">Ou importer un fichier .ics</label><input class="hidden" id="icsImport" type="file" accept=".ics,text/calendar"></div>
   <p class="small muted" id="calendarImportInfo">Aucun import pour le moment.</p>
  </div>
  <div class="panel">
@@ -205,7 +206,7 @@ const $=id=>document.getElementById(id);
 const STORAGE='capEquilibre_v1';
 const clone=obj=>JSON.parse(JSON.stringify(obj));
 const defaults={
- settings:{wakeTime:'05:30',bedTime:'21:30',spiritual:'flex',nephewFreq:'Selon ses devoirs et difficultés',specialty:'Gynécologie-obstétrique',family:'Le soir après le travail'},
+ settings:{wakeTime:'05:30',bedTime:'21:30',spiritual:'flex',nephewFreq:'Selon ses devoirs et difficultés',specialty:'Gynécologie-obstétrique',family:'Le soir après le travail',gcalIcsUrl:''},
  tasks:[],weekChecks:{},dayChecks:{},dayNotes:{},weekFocus:'',review:{},energy:'normal',duty:'none',
  calendarEvents:[],calendarImportedAt:null,alarms:[],
  routines:[
@@ -358,6 +359,27 @@ function renderUpcomingEvents(){
   const dateLabel=e.start.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})+(e.allDay?'':' · '+e.start.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}));
   return `<div class="task"><div class="row"><span class="pill">${esc(dateLabel)}</span><div><strong>${esc(e.title||'(sans titre)')}</strong></div></div></div>`;
  }).join('');
+}
+async function syncGoogleCalendar(){
+ const url=$('gcalIcsUrl').value.trim();
+ if(!url){alert('Colle d’abord l’adresse secrète iCal de ton agenda Google ci-dessus.');return}
+ data.settings.gcalIcsUrl=url;save();
+ const btn=$('gcalSync'),prevText=btn.textContent;btn.textContent='Synchronisation…';btn.disabled=true;
+ try{
+  const res=await fetch(url,{cache:'no-store'});
+  if(!res.ok)throw new Error('Le serveur a répondu '+res.status);
+  const text=await res.text();
+  const events=parseICS(text).filter(ev=>ev.start);
+  if(!events.length){alert('Aucun événement trouvé à cette adresse. Vérifie que le lien est bien une adresse « iCal », pas une adresse de partage classique.');return}
+  data.calendarEvents=events.map(ev=>({title:ev.title||'(sans titre)',start:ev.start.toISOString(),end:ev.end?ev.end.toISOString():null,allDay:!!ev.allDay}));
+  data.calendarImportedAt=new Date().toISOString();
+  save();renderUpcomingEvents();renderCalendarStatus();
+  alert('Agenda Google synchronisé : '+data.calendarEvents.length+' événement(s).');
+ }catch(err){
+  alert('Impossible de joindre ton agenda Google. Vérifie ta connexion internet et le lien collé.\n\nDétail : '+err.message);
+ }finally{
+  btn.textContent=prevText;btn.disabled=false;
+ }
 }
 function renderCalendarStatus(){
  const n=(data.calendarEvents||[]).length;
@@ -558,6 +580,7 @@ $('suggestAlarms').addEventListener('click',()=>{
  alert(added+' alarme(s) ajoutée(s) à partir de tes réglages (Réveil '+fmtHM(wh,wm)+', Coucher '+fmtHM(bh,bm)+').');
 });
 $('waAnalyze').addEventListener('click',analyzeWhatsApp);
+$('gcalSync').addEventListener('click',syncGoogleCalendar);
 $('icsImport').addEventListener('change',async e=>{
  const f=e.target.files[0];if(!f)return;
  try{
