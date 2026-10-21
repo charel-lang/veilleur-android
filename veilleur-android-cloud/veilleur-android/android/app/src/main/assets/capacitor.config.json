@@ -1,0 +1,9 @@
+{
+	"appId": "mg.veilleur.app",
+	"appName": "Veilleur",
+	"webDir": "www",
+	"backgroundColor": "#0d0b20",
+	"android": {
+		"allowMixedContent": false
+	}
+}
