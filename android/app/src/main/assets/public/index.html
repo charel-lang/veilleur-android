@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0b20">
+<title>Veilleur — Planning intelligent</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,600&family=IBM+Plex+Sans:wght@400;550;650&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0b20;--panel:#171333;--panel2:#201c42;--text:#f4f2fb;--muted:#aca7c9;--line:#2e2a54;--accent:#8c7cf5;--accent-deep:#5c4bc9;--accent2:#ec6fae;--coral:#ff9466;--coral-deep:#c15f3a;--sky:#4fd8e8;--danger:#ffb4a9;--radius-lg:24px;--radius:16px;--radius-sm:12px;--serif:'Fraunces',Georgia,serif;--sans:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#191235,#0a0818 60%);color:var(--text);font:16px/1.48 var(--sans)}
+header{position:relative;overflow:hidden;padding:26px 18px 18px;max-width:920px;margin:auto}
+.hero-motif{position:absolute;top:-14px;right:-10px;width:230px;max-width:46vw;opacity:.9;pointer-events:none}.hero-motif svg{width:100%;height:auto;display:block}
+header .eyebrow,header h1,header p{position:relative;z-index:1}
+h1{font-family:var(--sans);font-weight:700;font-size:clamp(1.6rem,6.2vw,2.05rem);letter-spacing:-.01em;margin:0 0 6px;line-height:1.18}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.1rem,4vw,1.26rem);margin:0 0 12px;line-height:1.22}
+h3{font-family:var(--sans);font-weight:650;font-size:.95rem;margin:0 0 7px}
+p{margin:6px 0;color:var(--muted);max-width:62ch}.eyebrow{color:var(--accent);font-size:.84rem;font-weight:600}
+main{max-width:920px;margin:auto;padding:0 14px 40px}.tabs{display:flex;gap:7px;overflow:auto;padding:0 14px 14px;max-width:920px;margin:auto}
+.tab{white-space:nowrap;border:0;border-radius:999px;padding:9px 14px;background:var(--panel);color:var(--text);font:inherit;font-weight:650;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line),0 2px 0 0 #0f1a16;transform:translateY(0);transition:transform .08s ease,box-shadow .08s ease}
+.tab:active{transform:translateY(2px);box-shadow:inset 0 0 0 1px var(--line),0 0 0 0 #0f1a16}
+.tab.active{background:var(--accent);color:#fff;box-shadow:0 3px 0 0 var(--accent-deep),0 6px 14px #00000026}
+.tab.active:active{transform:translateY(3px);box-shadow:0 0 0 0 var(--accent-deep),0 2px 6px #00000020}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:0 0 13px;cursor:default}
+.hero{background:linear-gradient(135deg,#6a5cf5,#3e7bf0);border-radius:var(--radius-lg);box-shadow:0 14px 34px #3e7bf040}
+.hero h2,.hero .eyebrow,.hero p{color:#fff}.hero .eyebrow{opacity:.85}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:var(--panel2);padding:12px;border-radius:var(--radius-sm);cursor:default}.stat b{font-family:var(--serif);font-size:clamp(1.2rem,4.5vw,1.45rem);display:block;font-weight:600}.muted{color:var(--muted)}.small{font-size:.86rem}.row{display:flex;align-items:flex-start;gap:10px}.row>*:last-child{flex:1}
+.pill{display:inline-block;border-radius:999px;padding:4px 9px;background:#2b2558;color:#e5e1ff;font-size:.78rem;font-weight:650;cursor:default}.pill-indispensable{background:#4a2c1c;color:#ffd9b8}.pill-important{background:#3a2440;color:var(--accent2)}.pill-attendre{background:#201c42;color:var(--muted)}
+.steps{margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}.steps .checkrow{padding:7px 0}.steps .checkrow .btn{padding:4px 8px;font-size:.76rem;border-radius:8px;box-shadow:0 2px 0 0 var(--accent-deep),0 4px 8px #00000020}
+.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:#fff;font-weight:750;font-size:.95rem;font-family:var(--sans);cursor:pointer;box-shadow:0 3px 0 0 var(--accent-deep),0 6px 14px #00000030;transform:translateY(0);transition:transform .08s ease,box-shadow .08s ease}
+.btn:active{transform:translateY(3px);box-shadow:0 0 0 0 var(--accent-deep),0 2px 6px #00000030}
+.btn.secondary{background:var(--panel2);color:var(--text);box-shadow:0 3px 0 0 #110e26,0 6px 14px #00000020}
+.btn.secondary:active{transform:translateY(3px);box-shadow:0 0 0 0 #110e26,0 2px 6px #00000020}
+.btn.danger{background:var(--coral);color:#2e130c;box-shadow:0 3px 0 0 var(--coral-deep),0 6px 14px #00000030}
+.btn.danger:active{transform:translateY(3px);box-shadow:0 0 0 0 var(--coral-deep),0 2px 6px #00000030}
+.btn:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+label{display:block;font-weight:650;font-size:.9rem;margin:10px 0 5px}input,select,textarea{width:100%;border:1px solid var(--line);background:#101b17;color:var(--text);border-radius:10px;padding:11px;font:inherit}textarea{min-height:76px;resize:vertical}input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;margin:2px 0}
+.checkrow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #241f48}.checkrow:last-child{border-bottom:0}.checkrow label{margin:0;font-weight:550;flex:1}.checkrow.done label{text-decoration:line-through;color:var(--muted)}
+.task{border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;margin-top:8px;background:#13102c;cursor:default}.tasktop{display:flex;gap:10px;align-items:flex-start}.tasktop label{flex:1;margin:0}.due{font-size:.78rem;color:var(--accent2);white-space:nowrap}.notice{border-left:3px solid var(--sky);padding:8px 10px;background:#152830;border-radius:0 9px 9px 0;color:#cdf2f7;margin-top:10px;cursor:default}.good{color:var(--sky)}.hidden{display:none!important}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.daygrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.day{background:var(--panel2);border-radius:var(--radius-sm);padding:10px;cursor:default}.day strong{display:block;margin-bottom:4px;font-family:var(--serif);color:var(--sky)}.footer{text-align:center;color:var(--muted);font-size:.8rem;padding:15px}
+.checkrow{cursor:default}.checkrow input,.checkrow label{cursor:pointer}
+.ticker{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel2);padding:8px 0;margin:2px 0 14px}
+.ticker-track{display:inline-block;padding-left:100%;animation:ticker 100s linear infinite;color:var(--accent2);font-family:var(--serif);font-size:.92rem;letter-spacing:.01em;cursor:default}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.daygrid{grid-template-columns:repeat(3,minmax(0,1fr))}header{padding-top:32px}}
+@media(prefers-reduced-motion:reduce){.btn,.tab{transition:none}.ticker-track{animation:none;padding-left:0}}
+</style>
+</head>
+<body>
+<header>
+ <div class="hero-motif" aria-hidden="true"><svg viewBox="0 0 230 110" xmlns="http://www.w3.org/2000/svg"><path d="M0,78 Q60,42 120,60 T230,46" stroke="var(--accent)" stroke-width="1.3" fill="none" opacity=".4"/><circle cx="186" cy="30" r="15" fill="var(--accent2)" opacity=".3"/></svg></div>
+ <div class="eyebrow">Veilleur</div>
+ <h1 id="greetingTitle">Bonjour, Charel’son</h1>
+</header>
+<div class="ticker" aria-hidden="true"><span class="ticker-track">Chaque matin, une force nouvelle · Dans le calme et la confiance est la force · Un pas à la fois suffit pour aujourd’hui · Le repos est aussi une offrande · Ce qui est semé avec soin porte du fruit · Servir avec constance, pas avec épuisement · La paix garde le cœur qui s’appuie · La famille est un jardin à cultiver &nbsp; &nbsp; &nbsp; Chaque matin, une force nouvelle · Dans le calme et la confiance est la force · Un pas à la fois suffit pour aujourd’hui · Le repos est aussi une offrande · Ce qui est semé avec soin porte du fruit · Servir avec constance, pas avec épuisement · La paix garde le cœur qui s’appuie · La famille est un jardin à cultiver</span></div>
+<nav class="tabs" aria-label="Sections">
+ <button class="tab active" data-tab="today">Aujourd’hui</button><button class="tab" data-tab="week">Semaine</button><button class="tab" data-tab="tasks">Échéances</button><button class="tab" data-tab="alarms">Alarmes</button><button class="tab" data-tab="review">Bilan & cap</button><button class="tab" data-tab="settings">Réglages</button>
+</nav>
+<main>
+<section id="today">
+ <div class="panel hero">
+  <div class="section-title"><div><div class="eyebrow">On avance sans s’épuiser</div><h2 id="dateTitle">Aujourd’hui</h2></div><span class="pill" id="dayModeLabel">Journée normale</span></div>
+  <p id="coach">Choisis ton niveau d’énergie : le programme sera allégé ou renforcé.</p>
+  <label for="energy">Mon état aujourd’hui</label>
+  <select id="energy"><option value="normal">Énergie correcte — journée normale</option><option value="tired">Fatigué — alléger le programme</option><option value="postcall">Après une garde difficile — récupération prioritaire</option></select>
+  <label for="duty">Situation de garde</label>
+  <select id="duty"><option value="none">Pas de garde aujourd’hui</option><option value="service">Garde de service</option><option value="block">Garde du bloc</option><option value="both">Garde de service + bloc</option><option value="post">Lendemain de garde</option></select>
+  <div class="actions"><button class="btn" id="buildPlan">Adapter ma journée</button><button class="btn secondary" id="resetChecks">Réinitialiser les cases du jour</button></div>
+  <div class="notice" id="smartNote">Les soins et urgences restent prioritaires. Les tâches personnelles non faites sont déplacées, pas transformées en échec.</div>
+ </div>
+ <div class="grid">
+  <div class="stat"><span class="muted small">Priorité du jour</span><b id="priorityCount">1</b><span class="small muted">tâche essentielle à choisir</span></div>
+  <div class="stat"><span class="muted small">Routine quotidienne</span><b id="routineCount">0%</b><span class="small muted">réalisée aujourd’hui</span></div>
+  <div class="stat"><span class="muted small">Échéances proches</span><b id="urgentCount">0</b><span class="small muted">à vérifier</span></div>
+  <div class="stat"><span class="muted small">Temps protégé</span><b id="sleepGoal">7–9 h</b><span class="small muted">sommeil recommandé</span></div>
+ </div>
+ <div class="panel">
+  <div class="section-title"><h2>Agenda importé</h2><span class="pill" id="calendarStatus">Aucun import</span></div>
+  <p class="small muted">Événements de ton calendrier Google importés en lecture seule (voir Réglages → Agenda).</p>
+  <div id="upcomingEvents"></div>
+ </div>
+ <div class="panel">
+  <div class="section-title"><h2>Routine essentielle</h2><span class="pill">Flexible</span></div>
+  <p>Les activités spirituelles et Duolingo sont prévues chaque jour, mais la fatigue clinique doit rester prise en compte.</p>
+  <div id="routineList"></div>
+ </div>
+ <div class="panel">
+  <h2>Planning de la journée</h2><div id="dayPlan"></div>
+  <label for="topTask">Ma priorité numéro 1 aujourd’hui</label><input id="topTask" placeholder="Ex. terminer le rapport PEV avant jeudi">
+  <label for="dayNote">Notes rapides / choses à ne pas oublier</label><textarea id="dayNote" placeholder="Une idée, une demande WhatsApp à noter, une échéance…"></textarea>
+  <div class="actions"><button class="btn" id="saveDay">Enregistrer ma journée</button></div>
+ </div>
+</section>
+<section id="week" class="hidden">
+ <div class="panel">
+  <h2>Ma semaine réaliste</h2>
+  <p>La clinique occupe les plages principales. Les activités personnelles sont des propositions : déplace-les si une garde, une urgence ou la fatigue l’exige.</p>
+  <div class="daygrid" id="weekGrid"></div>
+ </div>
+ <div class="panel">
+  <h2>Objectifs de la semaine</h2>
+  <div id="weeklyChecks"></div>
+  <label for="weekFocus">Le cap de cette semaine</label><textarea id="weekFocus" placeholder="Ex. avancer sur le cours de spécialisation et envoyer les rapports en avance"></textarea>
+  <div class="actions"><button class="btn" id="saveWeek">Enregistrer les objectifs</button></div>
+ </div>
+</section>
+<section id="tasks" class="hidden">
+ <div class="panel">
+  <h2>Message → tâche</h2>
+  <p class="small muted">Colle un message reçu (WhatsApp, SMS, réunion). Je propose un titre, un domaine et une date limite si elle est reconnaissable, sans rien ajouter automatiquement — tu vérifies, complètes si besoin, puis cliques « Ajouter la tâche » ci-dessous.</p>
+  <label for="waText">Message reçu</label><textarea id="waText" placeholder="Ex. Merci de transmettre le rapport PEV avant vendredi."></textarea>
+  <div class="actions"><button class="btn" id="waAnalyze">Analyser le message</button></div>
+  <div id="waResult"></div>
+ </div>
+ <div class="panel">
+  <h2>À traiter — échéances et messages</h2>
+  <p>Transforme chaque message important en tâche avec une date limite et une prochaine action. Vise, si possible, une fin deux jours avant l’échéance.</p>
+  <label for="taskName">Tâche</label><input id="taskName" placeholder="Ex. rapport mensuel PEV">
+  <div class="grid">
+   <div><label for="taskDue">Date limite</label><input id="taskDue" type="date"></div>
+   <div><label for="taskArea">Domaine</label><select id="taskArea"><option>FMA / administration</option><option>SDSP / CSB</option><option>Formation médicale</option><option>Famille / neveu</option><option>Projet personnel</option><option>Autre</option></select></div>
+   <div><label for="taskImportance">Importance</label><select id="taskImportance"><option value="haute">Haute</option><option value="moyenne" selected>Moyenne</option><option value="basse">Basse</option></select></div>
+   <div><label for="taskUrgency">Urgence</label><select id="taskUrgency"><option value="haute">Haute</option><option value="moyenne" selected>Moyenne</option><option value="basse">Basse</option></select></div>
+  </div>
+  <label for="taskNext">Prochaine action concrète</label><input id="taskNext" placeholder="Ex. vérifier les chiffres de septembre">
+  <div class="actions"><button class="btn" id="addTask">Ajouter la tâche</button></div>
+  <p class="small muted">Classement automatique en Indispensable / Important / Peut attendre, selon l’importance, l’urgence et la proximité de l’échéance — pas seulement la date limite.</p>
+  <div id="taskList"></div>
+ </div>
+</section>
+<section id="alarms" class="hidden">
+ <div class="panel">
+  <div class="section-title"><h2>Alarmes</h2><span class="pill" id="nativeStatus">Aperçu seul</span></div>
+  <p class="small muted" id="nativeNote">Dans ce navigateur, les alarmes ci-dessous restent une liste de référence — aucun son natif ne peut se déclencher ici. Une fois l’app compilée en application Android (voir le guide fourni à part), le même code programme de vraies alarmes locales.</p>
+  <div id="alarmList"></div>
+  <h3 style="margin-top:16px" id="alarmFormTitle">Ajouter une alarme</h3>
+  <label for="alarmTitle">Titre</label><input id="alarmTitle" placeholder="Ex. Préparer le rapport FMA">
+  <div class="grid">
+   <div><label for="alarmCategory">Catégorie</label><select id="alarmCategory"><option>Réveil</option><option>Départ au travail</option><option>Début/fin de service</option><option>Rendez-vous</option><option>Garde</option><option>Tâche urgente</option><option>Échéance administrative</option><option>Prière</option><option>Écoute de l’Évangile</option><option>Duolingo</option><option>Formation médicale</option><option>Activité familiale</option><option>Préparation du lendemain</option><option>Coucher / repos</option><option>Rappel personnalisé</option></select></div>
+   <div><label for="alarmTime">Heure</label><input id="alarmTime" type="time"></div>
+  </div>
+  <label>Jours</label>
+  <div class="actions" id="alarmDays"></div>
+  <div class="actions"><button class="btn" id="saveAlarm">Ajouter l’alarme</button><button class="btn secondary hidden" id="cancelAlarmEdit">Annuler la modification</button></div>
+  <div class="actions"><button class="btn secondary" id="suggestAlarms">Suggérer réveil/coucher depuis mes réglages</button></div>
+ </div>
+</section>
+<section id="review" class="hidden">
+ <div class="panel">
+  <h2>Bilan du soir — 5 à 10 minutes</h2>
+  <p>Le but est de garder le cap, pas de te juger. Une journée interrompue par les urgences n’est pas une journée ratée.</p>
+  <label for="win">1. Qu’est-ce qui a été important ou bien fait aujourd’hui ?</label><textarea id="win" placeholder="Même une petite chose compte…"></textarea>
+  <label for="risk">2. Qu’est-ce qui risque d’être oublié ou en retard ?</label><textarea id="risk" placeholder="Une échéance, un message, un appel à faire…"></textarea>
+  <label for="tomorrow">3. Quelle est la priorité numéro 1 de demain ?</label><textarea id="tomorrow" placeholder="Une seule priorité claire"></textarea>
+  <label for="gratitude">Un motif de gratitude / une pensée à méditer</label><textarea id="gratitude" placeholder="Quelques mots suffisent…"></textarea>
+  <div class="actions"><button class="btn" id="saveReview">Enregistrer mon bilan</button><button class="btn secondary" id="weeklyReview">Préparer le bilan hebdomadaire</button></div>
+ </div>
+ <div class="panel">
+  <h2>Bilan hebdomadaire — 20 à 30 minutes</h2>
+  <div id="weeklyPrompt"></div>
+ </div>
+</section>
+<section id="settings" class="hidden">
+ <div class="panel">
+  <h2>Réglages de ton quotidien</h2>
+  <label for="wakeTime">Heure de réveil souhaitée les jours sans garde</label><input id="wakeTime" type="time" value="05:30">
+  <label for="bedTime">Heure de coucher visée les jours sans garde</label><input id="bedTime" type="time" value="21:30">
+  <label for="spiritual">Organisation spirituelle</label><select id="spiritual"><option value="flex">Flexible selon les gardes</option><option value="fixed">Horaires fixes autant que possible</option></select>
+  <label for="nephewFreq">Encadrement du neveu</label><select id="nephewFreq"><option>Selon ses devoirs et difficultés</option><option>Presque tous les jours</option><option>2 à 3 fois par semaine</option></select>
+  <label for="specialty">Objectif principal de formation</label><select id="specialty"><option>Gynécologie-obstétrique</option><option>Autre spécialité à définir</option><option>Je réfléchis encore</option></select>
+  <label for="family">Temps familial préféré</label><select id="family"><option>Le soir après le travail</option><option>Surtout le week-end</option><option>Variable selon les gardes</option></select>
+  <div class="actions"><button class="btn" id="saveSettings">Enregistrer les réglages</button></div>
+ </div>
+ <div class="panel">
+  <h2>Mes habitudes</h2>
+  <p class="small muted">Modifie, ajoute ou supprime tes habitudes. Elles n’apparaissent dans « Aujourd’hui » que les jours que tu choisis ici.</p>
+  <div id="habitList"></div>
+  <h3 style="margin-top:16px" id="habitFormTitle">Ajouter une habitude</h3>
+  <label for="habitName">Nom</label><input id="habitName" placeholder="Ex. Lecture spirituelle">
+  <label for="habitDetail">Détail / but</label><input id="habitDetail" placeholder="Ex. pour commencer la journée en paix">
+  <div class="grid">
+   <div><label for="habitDuration">Durée (minutes)</label><input id="habitDuration" type="number" min="0" placeholder="10"></div>
+   <div><label for="habitPriority">Priorité</label><select id="habitPriority"><option value="haute">Haute — à préserver</option><option value="normale" selected>Normale — flexible</option></select></div>
+  </div>
+  <label>Jours concernés</label>
+  <div class="actions" id="habitDays"></div>
+  <div class="actions"><button class="btn" id="saveHabit">Ajouter l’habitude</button><button class="btn secondary hidden" id="cancelHabitEdit">Annuler la modification</button></div>
+ </div>
+ <div class="panel">
+  <h2>Agenda (Google Agenda, lecture seule)</h2>
+  <p class="small muted">Important, par souci de transparence : dans cette page publiée, les scripts de connexion Google ne peuvent pas se charger pour des raisons de sécurité — une synchronisation automatique et en direct n’est donc pas possible ici. La solution fiable, sans mot de passe ni risque : exporte ton calendrier Google (Google Agenda → Réglages → Importer/exporter → Exporter) puis importe le fichier .ics ci-dessous. Tu peux répéter l’opération aussi souvent que tu veux ; rien n’est envoyé sur Internet, tout reste dans ce navigateur.</p>
+  <div class="actions"><label class="btn secondary" for="icsImport" style="cursor:pointer">Importer un calendrier (.ics)</label><input class="hidden" id="icsImport" type="file" accept=".ics,text/calendar"></div>
+  <p class="small muted" id="calendarImportInfo">Aucun import pour le moment.</p>
+ </div>
+ <div class="panel">
+  <h2>Sauvegarde de tes données</h2><p>Les données sont gardées localement dans ce navigateur. Elles ne sont pas envoyées sur Internet. Exporte une copie de temps en temps, surtout avant de changer de téléphone ou de navigateur.</p>
+  <div class="actions"><button class="btn secondary" id="exportData">Exporter ma sauvegarde</button><label class="btn secondary" for="importFile" style="cursor:pointer">Importer une sauvegarde</label><input class="hidden" id="importFile" type="file" accept="application/json"><button class="btn danger" id="clearData">Effacer toutes mes données</button></div>
+ </div>
+</section>
+<div class="footer">Veilleur • Version locale, sans compte ni connexion requise</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const STORAGE='capEquilibre_v1';
+const clone=obj=>JSON.parse(JSON.stringify(obj));
+const defaults={
+ settings:{wakeTime:'05:30',bedTime:'21:30',spiritual:'flex',nephewFreq:'Selon ses devoirs et difficultés',specialty:'Gynécologie-obstétrique',family:'Le soir après le travail'},
+ tasks:[],weekChecks:{},dayChecks:{},dayNotes:{},weekFocus:'',review:{},energy:'normal',duty:'none',
+ calendarEvents:[],calendarImportedAt:null,alarms:[],
+ routines:[
+  {id:'gospel',name:'Écoute de l’Évangile',detail:'30 min le matin',duration:30,priority:'haute',days:[0,1,2,3,4,5,6]},
+  {id:'prayeram',name:'Prière du matin',detail:'10 min',duration:10,priority:'haute',days:[0,1,2,3,4,5,6]},
+  {id:'prayernoon',name:'Prière de midi',detail:'10 min',duration:10,priority:'haute',days:[0,1,2,3,4,5,6]},
+  {id:'prayerpm',name:'Prière du soir',detail:'10 min',duration:10,priority:'haute',days:[0,1,2,3,4,5,6]},
+  {id:'duolingo',name:'Duolingo',detail:'15 min — anglais ou italien selon ton choix',duration:15,priority:'normale',days:[0,1,2,3,4,5,6]},
+  {id:'reflection',name:'Bilan / méditation personnelle',detail:'5 à 10 min : vérifier le cap et la priorité de demain',duration:10,priority:'normale',days:[0,1,2,3,4,5,6]},
+  {id:'family',name:'Moment avec Claire et Ronny',detail:'Un moment de qualité, même court',duration:0,priority:'haute',days:[0,1,2,3,4,5,6]}
+ ]
+};
+let data=load();
+let expandedTaskId=null;
+let editingHabitId=null;
+let habitDraftDays=new Set([0,1,2,3,4,5,6]);
+function load(){try{return {...clone(defaults),...JSON.parse(localStorage.getItem(STORAGE)||'{}')}}catch(e){return clone(defaults)}}
+function save(){localStorage.setItem(STORAGE,JSON.stringify(data))}
+function dateKey(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function dayName(d){return ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'][d.getDay()]}
+function fmtDate(d=new Date()){return d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function checksToday(){return data.dayChecks[dateKey()]||(data.dayChecks[dateKey()]={})}
+function setTab(tab){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));['today','week','tasks','alarms','review','settings'].forEach(id=>$(id).classList.toggle('hidden',id!==tab));if(tab==='week')renderWeek();if(tab==='tasks')renderTasks();if(tab==='alarms'){renderAlarmList();syncNativeAlarms()}if(tab==='review')renderReview()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+function daysLabel(days){
+ if(!days||days.length===7)return 'Tous les jours';
+ if(!days.length)return 'Aucun jour';
+ const labels={0:'Dim',1:'Lun',2:'Mar',3:'Mer',4:'Jeu',5:'Ven',6:'Sam'};
+ return [1,2,3,4,5,6,0].filter(d=>days.includes(d)).map(d=>labels[d]).join(', ');
+}
+function renderRoutine(){
+ const c=checksToday(),todayDow=new Date().getDay();
+ const todays=data.routines.filter(r=>!r.days||!r.days.length||r.days.includes(todayDow));
+ $('routineList').innerHTML=todays.length?todays.map(r=>`<div class="checkrow ${c[r.id]?'done':''}"><input type="checkbox" data-routine="${r.id}" ${c[r.id]?'checked':''}><label><strong>${esc(r.name)}</strong>${r.priority==='haute'?' <span class="pill" style="padding:2px 7px;font-size:.7rem">À préserver</span>':''}<br><span class="muted small">${esc(r.detail||'')}${r.duration?' · '+r.duration+' min':''}</span></label></div>`).join(''):'<p class="small muted">Aucune habitude programmée aujourd’hui.</p>';
+ $('routineList').querySelectorAll('[data-routine]').forEach(el=>el.addEventListener('change',()=>{c[el.dataset.routine]=el.checked;save();renderRoutine();updateStats()}));
+ updateStats();
+}
+function renderHabitDayPicker(){
+ const defs=[[1,'Lun'],[2,'Mar'],[3,'Mer'],[4,'Jeu'],[5,'Ven'],[6,'Sam'],[0,'Dim']];
+ $('habitDays').innerHTML=defs.map(([v,l])=>`<button type="button" class="btn secondary" data-hday="${v}" style="${habitDraftDays.has(v)?'background:var(--accent);color:#102219;border-color:var(--accent)':''}">${l}</button>`).join('');
+ $('habitDays').querySelectorAll('[data-hday]').forEach(b=>b.addEventListener('click',()=>{const v=+b.dataset.hday;habitDraftDays.has(v)?habitDraftDays.delete(v):habitDraftDays.add(v);renderHabitDayPicker()}));
+}
+function renderHabitList(){
+ const list=$('habitList');
+ if(!data.routines.length){list.innerHTML='<p class="small muted">Aucune habitude pour le moment.</p>';return}
+ list.innerHTML=data.routines.map(h=>`<div class="task"><div class="row"><div><strong>${esc(h.name)}</strong><br><span class="muted small">${esc(h.detail||'')}${h.duration?' · '+h.duration+' min':''} · ${daysLabel(h.days)} · ${h.priority==='haute'?'Priorité haute':'Flexible'}</span></div></div><div class="actions"><button class="btn secondary" data-edithabit="${h.id}">Modifier</button><button class="btn secondary" data-delhabit="${h.id}">Supprimer</button></div></div>`).join('');
+ list.querySelectorAll('[data-edithabit]').forEach(b=>b.addEventListener('click',()=>startEditHabit(b.dataset.edithabit)));
+ list.querySelectorAll('[data-delhabit]').forEach(b=>b.addEventListener('click',()=>{if(confirm('Supprimer cette habitude ?')){data.routines=data.routines.filter(x=>x.id!==b.dataset.delhabit);save();renderHabitList();renderRoutine()}}));
+}
+function startEditHabit(id){
+ const h=data.routines.find(x=>x.id===id);if(!h)return;
+ editingHabitId=id;$('habitName').value=h.name;$('habitDetail').value=h.detail||'';$('habitDuration').value=h.duration||'';$('habitPriority').value=h.priority||'normale';
+ habitDraftDays=new Set(h.days&&h.days.length?h.days:[0,1,2,3,4,5,6]);renderHabitDayPicker();
+ $('habitFormTitle').textContent='Modifier l’habitude';$('saveHabit').textContent='Enregistrer les modifications';$('cancelHabitEdit').classList.remove('hidden');
+ $('habitName').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetHabitForm(){
+ editingHabitId=null;$('habitName').value='';$('habitDetail').value='';$('habitDuration').value='';$('habitPriority').value='normale';
+ habitDraftDays=new Set([0,1,2,3,4,5,6]);renderHabitDayPicker();
+ $('habitFormTitle').textContent='Ajouter une habitude';$('saveHabit').textContent="Ajouter l’habitude";$('cancelHabitEdit').classList.add('hidden');
+}
+function planItems(){
+ const energy=$('energy').value,duty=$('duty').value;
+ let items=[
+ ['05 h 30–06 h 00','Écoute de l’Évangile','Routine spirituelle'],
+ ['06 h 00–06 h 10','Prière du matin','Routine spirituelle'],
+ ['07 h 30–12 h / 13 h','FMA : consultations, visites, urgences','Priorité clinique'],
+ ['12 h–14 h 30','Repas, prière de midi et repos','Récupération'],
+ ['14 h 30–17 h','FMA : activités cliniques et administratives','Priorité clinique'],
+ ['Après 17 h','Famille, repas et préparation du lendemain','Équilibre']
+ ];
+ if(duty==='service'||duty==='block'||duty==='both')items[5]=['Après 17 h','Disponibilité de garde / appels possibles','Garde prioritaire'];
+ if(duty==='post'||energy==='postcall'){
+  items=[['Matin','Évangile et prière si possible, sans réduire le sommeil','Routine adaptable'],['07 h 30–12 h / 13 h','FMA : soins et décisions indispensables, vigilance accrue','Sécurité clinique'],['12 h–14 h 30','Repas, prière et repos / sieste si possible','Récupération'],['14 h 30–17 h','FMA : priorités indispensables ; reporter le non urgent','Alléger'],['Après 17 h','Repas, famille calme et coucher plus tôt','Récupération']];
+ }
+ if(energy==='tired'&&duty!=='post'){
+  items[5]=['Après 17 h','Famille et repos ; Duolingo seulement si tu en as l’énergie','Programme allégé'];
+ }
+ if(energy==='normal'&&duty==='none'){
+  items.splice(5,0,['Après 17 h 15','Une activité courte : formation médicale OU projet CSB','30–45 min, facultatif']);
+ }
+ return items;
+}
+function renderPlan(){
+ const items=planItems();$('dayPlan').innerHTML=items.map(([time,name,tag])=>`<div class="task"><div class="row"><span class="pill">${time}</span><div><strong>${name}</strong><div class="muted small">${tag}</div></div></div></div>`).join('');
+ const e=$('energy').value,d=$('duty').value;
+ $('dayModeLabel').textContent=(d==='post'||e==='postcall')?'Récupération':e==='tired'?'Journée allégée':d!=='none'?'Garde / imprévus':'Journée normale';
+ $('coach').textContent=(d==='post'||e==='postcall')?'Aujourd’hui, vise l’essentiel et protège ta récupération. Les tâches non urgentes peuvent attendre.':e==='tired'?'Réduis les objectifs personnels. Une seule priorité suffit.':'Les urgences FMA peuvent interrompre le planning : reprends au prochain créneau possible.';
+ $('smartNote').textContent=(d==='post'||e==='postcall')?'Après une garde difficile, évite de conduire si tu somnoles et, autant que possible, les tâches complexes à haut risque sans soutien. Ne compense pas en rognant sur le sommeil.':e==='tired'?'Plan minimum : soins indispensables, prière selon les possibilités, repas, repos et une priorité administrative.':'Choisis une seule tâche personnelle importante. Les autres activités sont facultatives si le travail clinique déborde.';
+}
+function updateStats(){
+ const c=checksToday(),todayDow=new Date().getDay();
+ const todays=data.routines.filter(r=>!r.days||!r.days.length||r.days.includes(todayDow));
+ const done=todays.filter(r=>c[r.id]).length;
+ $('routineCount').textContent=todays.length?Math.round(done/todays.length*100)+'%':'—';
+ const today=dateKey(),soon=data.tasks.filter(t=>!t.done&&t.due&&t.due>=today&&Math.ceil((new Date(t.due+'T12:00:00')-new Date(today+'T12:00:00'))/86400000)<=3).length;
+ $('urgentCount').textContent=soon;
+ $('priorityCount').textContent=$('topTask').value.trim()?1:0;
+}
+function renderWeek(){
+ const days=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+ const descriptions=[
+ 'Vérifier les échéances, les messages et les priorités FMA.',
+ 'Formation médicale 30 min si repos suffisant.',
+ 'Projet CSB ou outil de santé : 30 min, si possible.',
+ 'Formation médicale / spécialité : 30–45 min.',
+ 'Vérifier les dossiers et préparer les échéances à venir.',
+ 'Matin FMA sans garde ; après-midi famille, repos ou projet léger.',
+ 'Famille, récupération et préparation légère de la semaine.'
+ ];
+ $('weekGrid').innerHTML=days.map((d,i)=>`<div class="day"><strong>${d}</strong><span class="small muted">${descriptions[i]}</span></div>`).join('');
+ const goals=[['medical','Formation médicale'],['language','Duolingo quotidien'],['admin','Échéances FMA vérifiées'],['family','Temps de qualité en famille'],['rest','Récupération / sommeil protégés'],['csb','Avancée sur le projet CSB']];
+ $('weeklyChecks').innerHTML=goals.map(([id,n])=>`<div class="checkrow ${data.weekChecks[id]?'done':''}"><input type="checkbox" data-week="${id}" ${data.weekChecks[id]?'checked':''}><label>${n}</label></div>`).join('');
+ $('weeklyChecks').querySelectorAll('[data-week]').forEach(el=>el.addEventListener('change',()=>{data.weekChecks[el.dataset.week]=el.checked;save();renderWeek()}));
+ $('weekFocus').value=data.weekFocus||'';
+}
+function parseICSDate(key,val){
+ val=val.trim();
+ if(/VALUE=DATE\b/.test(key)||/^\d{8}$/.test(val)){const y=+val.slice(0,4),m=+val.slice(4,6)-1,d=+val.slice(6,8);return{date:new Date(y,m,d),allDay:true}}
+ const m=val.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z)?$/);
+ if(m){if(m[7])return{date:new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6])),allDay:false};return{date:new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6]),allDay:false}}
+ return{date:null,allDay:false};
+}
+function parseICS(text){
+ const raw=text.split(/\r\n|\n|\r/),lines=[];
+ raw.forEach(l=>{if(/^[ \t]/.test(l)&&lines.length)lines[lines.length-1]+=l.slice(1);else lines.push(l)});
+ const events=[];let cur=null;
+ lines.forEach(line=>{
+  if(line.startsWith('BEGIN:VEVENT'))cur={};
+  else if(line.startsWith('END:VEVENT')){if(cur&&cur.start)events.push(cur);cur=null}
+  else if(cur){
+   const idx=line.indexOf(':');if(idx<0)return;
+   const key=line.slice(0,idx),val=line.slice(idx+1);
+   if(key.startsWith('SUMMARY'))cur.title=val;
+   else if(key.startsWith('DTSTART')){const r=parseICSDate(key,val);cur.start=r.date;cur.allDay=r.allDay}
+   else if(key.startsWith('DTEND')){const r=parseICSDate(key,val);cur.end=r.date}
+  }
+ });
+ return events;
+}
+function renderUpcomingEvents(){
+ const el=$('upcomingEvents');if(!el)return;
+ const startOfToday=new Date();startOfToday.setHours(0,0,0,0);
+ const events=(data.calendarEvents||[]).map(e=>({...e,start:new Date(e.start),end:e.end?new Date(e.end):null}))
+  .filter(e=>e.start instanceof Date&&!isNaN(e.start)&&e.start>=startOfToday)
+  .sort((a,b)=>a.start-b.start).slice(0,8);
+ if(!events.length){el.innerHTML='<p class="small muted">Aucun événement importé à venir. Importe un fichier .ics depuis Réglages → Agenda.</p>';return}
+ el.innerHTML=events.map(e=>{
+  const dateLabel=e.start.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})+(e.allDay?'':' · '+e.start.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}));
+  return `<div class="task"><div class="row"><span class="pill">${esc(dateLabel)}</span><div><strong>${esc(e.title||'(sans titre)')}</strong></div></div></div>`;
+ }).join('');
+}
+function renderCalendarStatus(){
+ const n=(data.calendarEvents||[]).length;
+ const info=$('calendarImportInfo'),pill=$('calendarStatus');
+ const text=data.calendarImportedAt?`Dernier import : ${new Date(data.calendarImportedAt).toLocaleString('fr-FR')} · ${n} événement(s)`:'Aucun import pour le moment.';
+ if(info)info.textContent=text;
+ if(pill)pill.textContent=data.calendarImportedAt?n+' événement(s) importé(s)':'Aucun import';
+}
+let editingAlarmId=null;
+let alarmDraftDays=new Set([0,1,2,3,4,5,6]);
+function renderAlarmDayPicker(){
+ const defs=[[1,'Lun'],[2,'Mar'],[3,'Mer'],[4,'Jeu'],[5,'Ven'],[6,'Sam'],[0,'Dim']];
+ $('alarmDays').innerHTML=defs.map(([v,l])=>`<button type="button" class="btn secondary" data-aday="${v}" style="${alarmDraftDays.has(v)?'background:var(--accent);color:#fff;box-shadow:0 2px 0 0 var(--accent-deep),0 4px 8px #00000030':''}">${l}</button>`).join('');
+ $('alarmDays').querySelectorAll('[data-aday]').forEach(b=>b.addEventListener('click',()=>{const v=+b.dataset.aday;alarmDraftDays.has(v)?alarmDraftDays.delete(v):alarmDraftDays.add(v);renderAlarmDayPicker()}));
+}
+function fmtHM(h,m){return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')}
+function renderAlarmList(){
+ const list=$('alarmList');
+ if(!data.alarms.length){list.innerHTML='<p class="small muted">Aucune alarme pour le moment.</p>';return}
+ const sorted=[...data.alarms].sort((a,b)=>a.hour-b.hour||a.minute-b.minute);
+ list.innerHTML=sorted.map(a=>`<div class="task"><div class="row"><div><strong>${esc(fmtHM(a.hour,a.minute))} — ${esc(a.title)}</strong><br><span class="muted small">${esc(a.category)} · ${daysLabel(a.days)}${a.enabled?'':' · désactivée'}</span></div></div><div class="actions"><button class="btn secondary" data-togglealarm="${a.id}">${a.enabled?'Désactiver':'Activer'}</button><button class="btn secondary" data-editalarm="${a.id}">Modifier</button><button class="btn secondary" data-delalarm="${a.id}">Supprimer</button></div></div>`).join('');
+ list.querySelectorAll('[data-togglealarm]').forEach(b=>b.addEventListener('click',()=>{const a=data.alarms.find(x=>x.id===b.dataset.togglealarm);if(a){a.enabled=!a.enabled;save();renderAlarmList();syncNativeAlarms()}}));
+ list.querySelectorAll('[data-editalarm]').forEach(b=>b.addEventListener('click',()=>startEditAlarm(b.dataset.editalarm)));
+ list.querySelectorAll('[data-delalarm]').forEach(b=>b.addEventListener('click',()=>{if(confirm('Supprimer cette alarme ?')){data.alarms=data.alarms.filter(x=>x.id!==b.dataset.delalarm);save();renderAlarmList();syncNativeAlarms()}}));
+}
+function startEditAlarm(id){
+ const a=data.alarms.find(x=>x.id===id);if(!a)return;
+ editingAlarmId=id;$('alarmTitle').value=a.title;$('alarmCategory').value=a.category;$('alarmTime').value=fmtHM(a.hour,a.minute);
+ alarmDraftDays=new Set(a.days&&a.days.length?a.days:[0,1,2,3,4,5,6]);renderAlarmDayPicker();
+ $('alarmFormTitle').textContent='Modifier l’alarme';$('saveAlarm').textContent='Enregistrer les modifications';$('cancelAlarmEdit').classList.remove('hidden');
+ $('alarmTitle').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function resetAlarmForm(){
+ editingAlarmId=null;$('alarmTitle').value='';$('alarmCategory').selectedIndex=0;$('alarmTime').value='';
+ alarmDraftDays=new Set([0,1,2,3,4,5,6]);renderAlarmDayPicker();
+ $('alarmFormTitle').textContent='Ajouter une alarme';$('saveAlarm').textContent='Ajouter l’alarme';$('cancelAlarmEdit').classList.add('hidden');
+}
+async function syncNativeAlarms(){
+ const statusPill=$('nativeStatus'),note=$('nativeNote');
+ const isNative=typeof Capacitor!=='undefined'&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform();
+ if(!isNative){
+  statusPill.textContent='Aperçu seul';
+  note.textContent='Dans ce navigateur, les alarmes ci-dessus restent une liste de référence — aucun son natif ne peut se déclencher ici. Une fois l’app compilée en application Android, le même code programme de vraies alarmes locales.';
+  return;
+ }
+ try{
+  const LN=Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications;
+  if(!LN){statusPill.textContent='Module alarme absent';note.textContent='L’app native est détectée mais le module d’alarmes locales n’est pas installé.';return}
+  const perm=await LN.requestPermissions();
+  if(perm.display!=='granted'){statusPill.textContent='Permission refusée';note.textContent='Autorise les notifications pour cette app dans les réglages Android pour que les alarmes sonnent.';return}
+  await LN.cancel({notifications:data.alarms.map(a=>({id:hashId(a.id)}))});
+  const active=data.alarms.filter(a=>a.enabled);
+  const notifications=active.map(a=>({
+   id:hashId(a.id),title:a.title,body:a.category,
+   schedule:{on:{hour:a.hour,minute:a.minute},allowWhileIdle:true},
+   sound:'default',channelId:'veilleur-alarms'
+  }));
+  if(notifications.length)await LN.schedule({notifications});
+  statusPill.textContent=active.length+' alarme(s) active(s)';
+  note.textContent='Alarmes natives programmées sur cet appareil Android. Dernière synchronisation : '+new Date().toLocaleString('fr-FR')+'.';
+ }catch(err){statusPill.textContent='Erreur de synchronisation';note.textContent='Impossible de programmer les alarmes natives pour le moment : '+(err&&err.message?err.message:'erreur inconnue')+'.'}
+}
+function hashId(str){let h=0;for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))>>>0}return h%2147483647}
+function monthIndex(name){const map={janvier:0,'février':1,fevrier:1,mars:2,avril:3,mai:4,juin:5,juillet:6,'août':7,aout:7,septembre:8,octobre:9,novembre:10,'décembre':11,decembre:11};return map[name.toLowerCase()]}
+function nextWeekday(target){const d=new Date();const diff=(target-d.getDay()+7)%7;d.setDate(d.getDate()+diff);return d}
+function parseDueDate(text){
+ const t=text.toLowerCase(),today=new Date();
+ if(/\baujourd'?hui\b/.test(t))return dateKey(today);
+ if(/\bapr[eè]s[-\s]?demain\b/.test(t)){const d=new Date(today);d.setDate(d.getDate()+2);return dateKey(d)}
+ if(/\bdemain\b/.test(t)){const d=new Date(today);d.setDate(d.getDate()+1);return dateKey(d)}
+ let m=t.match(/dans\s+(\d+)\s+jour/);if(m){const d=new Date(today);d.setDate(d.getDate()+(+m[1]));return dateKey(d)}
+ m=t.match(/dans\s+(\d+)\s+semaine/);if(m){const d=new Date(today);d.setDate(d.getDate()+(+m[1])*7);return dateKey(d)}
+ const weekdays={dimanche:0,lundi:1,mardi:2,mercredi:3,jeudi:4,vendredi:5,samedi:6};
+ for(const name in weekdays){if(new RegExp('\\b'+name+'\\b').test(t))return dateKey(nextWeekday(weekdays[name]))}
+ m=t.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+ if(m){let y=m[3]?(m[3].length===2?2000+(+m[3]):+m[3]):today.getFullYear();const d=new Date(y,+m[2]-1,+m[1]);if(!m[3]&&d<today)d.setFullYear(d.getFullYear()+1);return dateKey(d)}
+ m=t.match(/\b(\d{1,2})\s+(janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t|septembre|octobre|novembre|d[ée]cembre)\b/);
+ if(m){const d=new Date(today.getFullYear(),monthIndex(m[2]),+m[1]);if(d<today)d.setFullYear(d.getFullYear()+1);return dateKey(d)}
+ return '';
+}
+function guessArea(text){
+ const t=text.toLowerCase();
+ if(/\bneveu\b/.test(t))return 'Famille / neveu';
+ if(/\bcsb\b|\bsdsp\b/.test(t))return 'SDSP / CSB';
+ if(/formation|sp[ée]cialisation|\bcours\b/.test(t))return 'Formation médicale';
+ if(/\bprojet\b/.test(t))return 'Projet personnel';
+ return 'FMA / administration';
+}
+function guessTitle(text){
+ let m=text.match(/merci\s+de\s+([^.?!\n]+)/i)||text.match(/pouvez[- ]vous\s+([^.?!\n]+)/i)||text.match(/il\s+faut\s+([^.?!\n]+)/i);
+ if(m){let s=m[1].replace(/\bavant\b.*/i,'').trim();s=s.charAt(0).toUpperCase()+s.slice(1);return s.length>80?s.slice(0,80)+'…':s}
+ const first=text.trim().split(/\n/)[0];
+ return first.length>80?first.slice(0,80)+'…':first;
+}
+function analyzeWhatsApp(){
+ const text=$('waText').value.trim();
+ if(!text){alert('Colle un message à analyser.');return}
+ const due=parseDueDate(text),area=guessArea(text),title=guessTitle(text);
+ $('taskName').value=title;$('taskArea').value=area;$('taskDue').value=due;
+ $('taskUrgency').value=(due&&daysUntil(due)!==null&&daysUntil(due)<=2)?'haute':'moyenne';
+ $('taskNext').value='';
+ const note=due?`Date détectée : ${new Date(due+'T12:00:00').toLocaleDateString('fr-FR')}. Vérifie qu’elle est correcte avant d’ajouter la tâche.`:`Je n’ai pas trouvé de date limite claire dans ce message. Complète-la toi-même dans le champ « Date limite » si besoin.`;
+ $('waResult').innerHTML=`<div class="notice">${esc(note)}</div>`;
+ $('taskName').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function daysUntil(due){if(!due)return null;const today=dateKey();return Math.ceil((new Date(due+'T12:00:00')-new Date(today+'T12:00:00'))/86400000)}
+function priorityOf(t){
+ const imp=t.importance||'moyenne',urg=t.urgency||'moyenne',d=daysUntil(t.due);
+ const closeDue=d!==null&&d<=2,soonDue=d!==null&&d<=5;
+ if(imp==='haute'&&(urg==='haute'||closeDue))return 'indispensable';
+ if((imp==='haute'||urg==='haute')||soonDue)return 'important';
+ return 'attendre';
+}
+function priorityLabel(p){return p==='indispensable'?'Indispensable':p==='important'?'Important':'Peut attendre'}
+function priorityClass(p){return p==='indispensable'?'pill-indispensable':p==='important'?'pill-important':'pill-attendre'}
+function addStep(taskId,label){const t=data.tasks.find(x=>x.id===taskId);if(!t)return;t.steps=t.steps||[];t.steps.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),label,done:false});save();renderTasks()}
+function toggleStep(taskId,stepId){const t=data.tasks.find(x=>x.id===taskId);if(!t||!t.steps)return;const s=t.steps.find(x=>x.id===stepId);if(s){s.done=!s.done;save();renderTasks()}}
+function deleteStep(taskId,stepId){const t=data.tasks.find(x=>x.id===taskId);if(!t||!t.steps)return;t.steps=t.steps.filter(x=>x.id!==stepId);save();renderTasks()}
+function taskCard(t,today){
+ let status=t.done?'Terminée':!t.due?'Sans date':t.due<today?'En retard':t.due===today?'Pour aujourd’hui':'Échéance '+new Date(t.due+'T12:00:00').toLocaleDateString('fr-FR');
+ const steps=t.steps||[],doneSteps=steps.filter(s=>s.done).length,p=priorityOf(t),expanded=expandedTaskId===t.id;
+ return `<div class="task"><div class="tasktop"><input type="checkbox" data-done="${t.id}" ${t.done?'checked':''}><label><strong>${esc(t.name)}</strong> ${t.done?'':`<span class="pill ${priorityClass(p)}">${priorityLabel(p)}</span>`}<br><span class="muted small">${esc(t.area)} · ${esc(t.next||'Prochaine action à préciser')}</span><br><span class="due">${esc(status)}</span></label></div>
+ <div class="actions"><button class="btn secondary" data-expand="${t.id}">${steps.length?'Étapes ('+doneSteps+'/'+steps.length+')':'Décomposer en étapes'}</button><button class="btn secondary" data-delete="${t.id}">Supprimer</button></div>
+ ${expanded?`<div class="steps">${steps.map(s=>`<div class="checkrow ${s.done?'done':''}"><input type="checkbox" data-stepdone="${t.id}|${s.id}" ${s.done?'checked':''}><label>${esc(s.label)}</label><button class="btn secondary" data-stepdel="${t.id}|${s.id}">✕</button></div>`).join('')}${!steps.length?'<p class="small muted">Tâche volumineuse ? Propose une première étape de 5 à 20 minutes.</p>':''}<div class="row" style="margin-top:8px"><input data-stepinput="${t.id}" placeholder="Nouvelle étape (ex. vérifier les chiffres de septembre)"><button class="btn secondary" data-stepadd="${t.id}">Ajouter</button></div></div>`:''}
+ </div>`;
+}
+function renderTasks(){
+ const list=$('taskList');
+ if(!data.tasks.length){list.innerHTML='<p>Aucune tâche enregistrée. Ajoute ici les demandes importantes reçues par WhatsApp.</p>';return}
+ const today=dateKey();
+ const active=data.tasks.filter(t=>!t.done),done=data.tasks.filter(t=>t.done);
+ const groups={indispensable:[],important:[],attendre:[]};
+ active.forEach(t=>groups[priorityOf(t)].push(t));
+ Object.keys(groups).forEach(k=>groups[k].sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')));
+ let html='';
+ [['indispensable','Indispensable'],['important','Important'],['attendre','Peut attendre']].forEach(([key,label])=>{
+  if(!groups[key].length)return;
+  html+=`<h3 class="small muted" style="margin:14px 0 2px">${label} (${groups[key].length})</h3>`+groups[key].map(t=>taskCard(t,today)).join('');
+ });
+ if(done.length)html+=`<h3 class="small muted" style="margin:14px 0 2px">Terminées (${done.length})</h3>`+done.slice(0,8).map(t=>taskCard(t,today)).join('');
+ list.innerHTML=html||'<p class="small muted">Tout est classé « peut attendre » ou terminé.</p>';
+ list.querySelectorAll('[data-done]').forEach(el=>el.addEventListener('change',()=>{let t=data.tasks.find(x=>x.id===el.dataset.done);if(t)t.done=el.checked;save();renderTasks();updateStats()}));
+ list.querySelectorAll('[data-delete]').forEach(el=>el.addEventListener('click',()=>{data.tasks=data.tasks.filter(x=>x.id!==el.dataset.delete);if(expandedTaskId===el.dataset.delete)expandedTaskId=null;save();renderTasks();updateStats()}));
+ list.querySelectorAll('[data-expand]').forEach(el=>el.addEventListener('click',()=>{expandedTaskId=expandedTaskId===el.dataset.expand?null:el.dataset.expand;renderTasks()}));
+ list.querySelectorAll('[data-stepdone]').forEach(el=>el.addEventListener('change',()=>{const[tid,sid]=el.dataset.stepdone.split('|');toggleStep(tid,sid)}));
+ list.querySelectorAll('[data-stepdel]').forEach(el=>el.addEventListener('click',()=>{const[tid,sid]=el.dataset.stepdel.split('|');deleteStep(tid,sid)}));
+ list.querySelectorAll('[data-stepadd]').forEach(el=>el.addEventListener('click',()=>{const tid=el.dataset.stepadd;const input=list.querySelector(`[data-stepinput="${tid}"]`);const v=input.value.trim();if(!v)return;addStep(tid,v)}));
+}
+function renderReview(){
+ const r=data.review[dateKey()]||{};
+ ['win','risk','tomorrow','gratitude'].forEach(k=>$(k).value=r[k]||'');
+ $('weeklyPrompt').innerHTML='<p><strong>Questions à examiner :</strong></p><ul><li>Quelles sont les trois échéances les plus importantes des 7 prochains jours ?</li><li>Quand sont mes gardes et quand pourrai-je récupérer ?</li><li>Quel petit pas concret pour ma spécialisation ?</li><li>Quel moment protéger pour Claire et Ronny ?</li><li>Qu’est-ce que je peux reporter, déléguer ou simplifier ?</li></ul>';
+}
+function loadSettings(){Object.keys(data.settings).forEach(k=>{if($(k))$(k).value=data.settings[k]})}
+function saveDay(){
+ data.dayNotes[dateKey()]={topTask:$('topTask').value,dayNote:$('dayNote').value};save();updateStats();alert('Journée enregistrée sur cet appareil.');
+}
+function setGreeting(){
+ const h=new Date().getHours();
+ const greet=h<5?'Bonne nuit':h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
+ $('greetingTitle').textContent=greet+', Charel’son';
+}
+function init(){
+ setGreeting();
+ $('dateTitle').textContent=fmtDate();$('energy').value=data.energy||'normal';$('duty').value=data.duty||'none';loadSettings();
+ const n=data.dayNotes[dateKey()]||{};$('topTask').value=n.topTask||'';$('dayNote').value=n.dayNote||'';
+ renderRoutine();renderPlan();renderWeek();renderTasks();renderReview();renderHabitDayPicker();renderHabitList();renderUpcomingEvents();renderCalendarStatus();renderAlarmDayPicker();renderAlarmList();syncNativeAlarms();updateStats();
+}
+$('saveHabit').addEventListener('click',()=>{
+ const name=$('habitName').value.trim();
+ if(!name){alert('Indique le nom de l’habitude.');return}
+ const obj={name,detail:$('habitDetail').value.trim(),duration:+$('habitDuration').value||0,priority:$('habitPriority').value,days:[...habitDraftDays]};
+ if(editingHabitId){const h=data.routines.find(x=>x.id===editingHabitId);if(h)Object.assign(h,obj)}
+ else data.routines.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),...obj});
+ save();resetHabitForm();renderHabitList();renderRoutine();updateStats();
+});
+$('cancelHabitEdit').addEventListener('click',resetHabitForm);
+$('saveAlarm').addEventListener('click',()=>{
+ const title=$('alarmTitle').value.trim(),time=$('alarmTime').value;
+ if(!title){alert('Indique le titre de l’alarme.');return}
+ if(!time){alert('Indique une heure.');return}
+ const[hour,minute]=time.split(':').map(Number);
+ const obj={title,category:$('alarmCategory').value,hour,minute,days:[...alarmDraftDays],enabled:true};
+ if(editingAlarmId){const a=data.alarms.find(x=>x.id===editingAlarmId);if(a)Object.assign(a,obj)}
+ else data.alarms.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),...obj});
+ save();resetAlarmForm();renderAlarmList();syncNativeAlarms();
+});
+$('cancelAlarmEdit').addEventListener('click',resetAlarmForm);
+$('suggestAlarms').addEventListener('click',()=>{
+ const[wh,wm]=(data.settings.wakeTime||'05:30').split(':').map(Number);
+ const[bh,bm]=(data.settings.bedTime||'21:30').split(':').map(Number);
+ const already=new Set(data.alarms.map(a=>a.category));
+ let added=0;
+ if(!already.has('Réveil')){data.alarms.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:'Réveil',category:'Réveil',hour:wh,minute:wm,days:[0,1,2,3,4,5,6],enabled:true});added++}
+ if(!already.has('Coucher / repos')){data.alarms.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)+'x',title:'Préparer le coucher',category:'Coucher / repos',hour:bh,minute:bm,days:[0,1,2,3,4,5,6],enabled:true});added++}
+ if(!added){alert('Les alarmes Réveil et Coucher existent déjà.');return}
+ save();renderAlarmList();syncNativeAlarms();
+ alert(added+' alarme(s) ajoutée(s) à partir de tes réglages (Réveil '+fmtHM(wh,wm)+', Coucher '+fmtHM(bh,bm)+').');
+});
+$('waAnalyze').addEventListener('click',analyzeWhatsApp);
+$('icsImport').addEventListener('change',async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{
+  const text=await f.text();
+  const events=parseICS(text).filter(ev=>ev.start);
+  if(!events.length){alert('Aucun événement reconnu dans ce fichier.');e.target.value='';return}
+  data.calendarEvents=events.map(ev=>({title:ev.title||'(sans titre)',start:ev.start.toISOString(),end:ev.end?ev.end.toISOString():null,allDay:!!ev.allDay}));
+  data.calendarImportedAt=new Date().toISOString();
+  save();renderUpcomingEvents();renderCalendarStatus();
+  alert('Agenda importé : '+data.calendarEvents.length+' événement(s) trouvé(s).');
+ }catch(err){alert('Fichier .ics non valide ou illisible.')}
+ e.target.value='';
+});
+$('buildPlan').addEventListener('click',()=>{data.energy=$('energy').value;data.duty=$('duty').value;save();renderPlan()});
+$('resetChecks').addEventListener('click',()=>{if(confirm('Réinitialiser les cases de routine pour aujourd’hui ?')){data.dayChecks[dateKey()]={};save();renderRoutine()}});
+$('saveDay').addEventListener('click',saveDay);
+$('topTask').addEventListener('input',updateStats);
+$('addTask').addEventListener('click',()=>{const name=$('taskName').value.trim();if(!name){alert('Indique le nom de la tâche.');return}data.tasks.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,due:$('taskDue').value,area:$('taskArea').value,importance:$('taskImportance').value,urgency:$('taskUrgency').value,next:$('taskNext').value.trim(),done:false,steps:[]});save();$('taskName').value='';$('taskDue').value='';$('taskNext').value='';renderTasks();updateStats()});
+$('saveWeek').addEventListener('click',()=>{data.weekFocus=$('weekFocus').value;save();alert('Objectifs de la semaine enregistrés.')});
+$('saveReview').addEventListener('click',()=>{data.review[dateKey()]={win:$('win').value,risk:$('risk').value,tomorrow:$('tomorrow').value,gratitude:$('gratitude').value};save();alert('Bilan enregistré.')});
+$('weeklyReview').addEventListener('click',()=>{setTab('week');$('weekFocus').focus()});
+$('saveSettings').addEventListener('click',()=>{Object.keys(data.settings).forEach(k=>{if($(k))data.settings[k]=$(k).value});save();alert('Réglages enregistrés.')});
+$('exportData').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='veilleur-sauvegarde-'+dateKey()+'.json';a.click();URL.revokeObjectURL(a.href)});
+$('importFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj.settings||!Array.isArray(obj.tasks))throw new Error();data={...clone(defaults),...obj};save();init();alert('Sauvegarde importée.')}catch(err){alert('Fichier de sauvegarde non valide.')}e.target.value=''});
+$('clearData').addEventListener('click',()=>{if(confirm('Effacer toutes les tâches, notes et réglages enregistrés sur cet appareil ? Cette action est irréversible.')){localStorage.removeItem(STORAGE);data=clone(defaults);init()}});
+init();
+</script>
+</body>
+</html>
