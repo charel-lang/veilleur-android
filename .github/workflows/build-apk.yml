@@ -17,11 +17,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Installer le SDK Android
-        uses: android-actions/setup-android@v3
-
-      - name: Accepter les licences du SDK (au cas où)
-        run: yes | sdkmanager --licenses > /dev/null 2>&1 || true
+      - name: Accepter les licences et installer les composants SDK
+        run: |
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" > /dev/null
 
       - name: Rendre gradlew exécutable
         working-directory: android
